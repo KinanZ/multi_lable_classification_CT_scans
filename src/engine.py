@@ -1,6 +1,7 @@
 from tqdm import tqdm
 import torch
 
+
 # training function
 def train(model, dataloader, optimizer, criterion, train_data, device):
     print('Training')
@@ -21,6 +22,7 @@ def train(model, dataloader, optimizer, criterion, train_data, device):
         
     train_loss = train_running_loss / counter
     return train_loss
+
 
 # validation function
 def validate(model, dataloader, criterion, val_data, device):

@@ -4,8 +4,9 @@ from PIL import Image
 import numpy as np
 import torch
 
-from torch.utils.data import DataLoader, Dataset
+from torch.utils.data import Dataset
 import torchvision.transforms as transforms
+
 
 class brain_CT_scan(Dataset):
     """Brain CT Scans dataset."""
@@ -41,7 +42,8 @@ class brain_CT_scan(Dataset):
             'image': torch.tensor(image, dtype=torch.float32),
             'labels': torch.tensor(labels, dtype=torch.float32)
         }
-    
+
+
 train_transforms = transforms.Compose([
                 transforms.ToPILImage(),
                 transforms.RandomHorizontalFlip(p=0.5),

@@ -1,0 +1,21 @@
+# Random seed
+SEED: 101
+
+# path to json file with annotations
+json_file_path: "/misc/lmbraid19/argusm/CLUSTER/multimed/NSEG2015_2/train.json"
+
+# path to the images' folder
+images_path: "/misc/lmbraid19/argusm/CLUSTER/multimed/NSEG2015_2/JPEGImages/"
+
+# data loading parameters:
+validation_split: .15
+shuffle_dataset: True
+batch_size: 4
+
+# model parameters:
+pretrained: True
+requires_grad: True
+
+# learning parameters
+lr: 0.0005
+epochs: 2

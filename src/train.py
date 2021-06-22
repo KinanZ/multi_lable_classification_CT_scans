@@ -100,7 +100,7 @@ if __name__ == '__main__':
     ap = argparse.ArgumentParser()
 
     # Add the arguments to the parser
-    ap.add_argument("-cp", "--config_path", default="../configs/debugging_config.yml",
+    ap.add_argument("-cp", "--config_path", default="/misc/student/alzouabk/Thesis/supervised_multi_label_classification/configs/debugging_config.yml",
                     help="path to yaml configuration file", type=str)
 
     args = ap.parse_args()

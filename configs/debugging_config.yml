@@ -10,7 +10,7 @@ images_path: "/misc/lmbraid19/argusm/CLUSTER/multimed/NSEG2015_2/JPEGImages/"
 # data loading parameters:
 validation_split: .15
 shuffle_dataset: True
-batch_size: 4
+batch_size: 18
 
 # model parameters:
 pretrained: True
@@ -18,4 +18,4 @@ requires_grad: True
 
 # learning parameters
 lr: 0.0005
-epochs: 2
+epochs: 40

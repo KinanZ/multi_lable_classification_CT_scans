@@ -84,7 +84,7 @@ def main(config_path):
                 'model_state_dict': model.state_dict(),
                 'optimizer_state_dict': optimizer.state_dict(),
                 'loss': criterion,
-                }, '../outputs/model.pth')
+                }, '/misc/student/alzouabk/Thesis/supervised_multi_label_classification/outputs/model.pth')
     # plot and save the train and validation line graphs
     plt.figure(figsize=(10, 7))
     plt.plot(train_loss, color='orange', label='train loss')
@@ -92,7 +92,7 @@ def main(config_path):
     plt.xlabel('Epochs')
     plt.ylabel('Loss')
     plt.legend()
-    plt.savefig('../outputs/loss.png')
+    plt.savefig('/misc/student/alzouabk/Thesis/supervised_multi_label_classification/outputs/loss.png')
 
 
 if __name__ == '__main__':

@@ -22,7 +22,7 @@ def save_yaml(dict_file, yaml_path):
 
 class Configuration:
     current_file_path = os.path.dirname(os.path.realpath(__file__))
-    default_config_path = os.path.join(current_file_path, "configs", "default_config.yml")
+    default_config_path = os.path.join(current_file_path, "../configs", "default_config.yml")
 
     def __init__(self, config_path: str = None, default_config_path=default_config_path):
         # read base config

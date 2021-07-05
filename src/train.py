@@ -1,6 +1,4 @@
 import os
-import numpy as np
-import matplotlib.pyplot as plt
 import argparse
 
 import torch
@@ -11,6 +9,7 @@ from torch.utils.data.sampler import SubsetRandomSampler
 from engine import train, validate
 from dataset import brain_CT_scan, train_transforms, valid_transforms
 from my_model import resnet_model
+from visualize import plot_loss, plot_evaluation_metrics
 import my_utils
 
 
@@ -18,36 +17,26 @@ def main(config_path):
     # read config
     config = my_utils.Configuration(config_path).as_dict
 
+    # experiment_name
+    exp_name = config['exp_name']
+
     # paths
-    json_file_path = config['json_file_path']
+    json_file_path_train = config['json_file_path_train']
+    json_file_path_test = config['json_file_path_test']
     images_path = config['images_path']
+    output_path = os.path.join(config['output_path'], exp_name)
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
 
-    # seed
-    random_seed = config['SEED']
-
-    train_dataset = brain_CT_scan(json_file_path, images_path, train_transforms)
-    valid_dataset = brain_CT_scan(json_file_path, images_path, valid_transforms)
+    train_dataset = brain_CT_scan(json_file_path_train, images_path, train_transforms)
+    valid_dataset = brain_CT_scan(json_file_path_test, images_path, valid_transforms)
 
     # data loading parameters
-    validation_split = config['validation_split']
     shuffle_dataset = config['shuffle_dataset']
     batch_size = config['batch_size']
 
-    # Creating data indices for training and validation splits:
-    dataset_size = len(train_dataset)
-    indices = list(range(dataset_size))
-    split = int(np.floor(validation_split * dataset_size))
-    if shuffle_dataset:
-        np.random.seed(random_seed)
-        np.random.shuffle(indices)
-    train_indices, val_indices = indices[split:], indices[:split]
-
-    # Creating PT data samplers and loaders:
-    train_sampler = SubsetRandomSampler(train_indices)
-    valid_sampler = SubsetRandomSampler(val_indices)
-
-    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, sampler=train_sampler)
-    validation_loader = torch.utils.data.DataLoader(valid_dataset, batch_size=batch_size, sampler=valid_sampler)
+    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=shuffle_dataset, num_workers=4)
+    validation_loader = torch.utils.data.DataLoader(valid_dataset, batch_size=batch_size)
 
     # initialize the computation device
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -64,19 +53,37 @@ def main(config_path):
     # start the training and validation
     train_loss = []
     valid_loss = []
+    eval_results = {'accuracy': [], 'micro/precision': [], 'micro/recall': [], 'micro/f1': [],
+                    'macro/precision': [], 'macro/recall': [], 'macro/f1': [],
+                    'sample/precision': [], 'sample/recall': [], 'sample/f1': []}
     for epoch in range(epochs):
         print(f"Epoch {epoch+1} of {epochs}")
         train_epoch_loss = train(
             model, train_loader, optimizer, criterion, train_dataset, device
         )
-        valid_epoch_loss = validate(
-            model, validation_loader, criterion, valid_dataset, device
-        )
+        if config['evaluate']:
+            valid_epoch_loss, results = validate(
+                model, validation_loader, criterion, valid_dataset, device
+            )
+            for key in eval_results:
+                eval_results[key].extend(results[key])
+        else:
+            valid_epoch_loss = validate(
+                model, validation_loader, criterion, valid_dataset, device
+            )
         train_loss.append(train_epoch_loss)
         valid_loss.append(valid_epoch_loss)
         print(f"Train Loss: {train_epoch_loss:.4f}")
         print(f'Val Loss: {valid_epoch_loss:.4f}')
-
+        if config['evaluate']:
+            print("Accuracy: {:.3f}"
+                  "micro f1: {:.3f} "
+                  "macro f1: {:.3f} "
+                  "samples f1: {:.3f} ".format(results['accuracy'],
+                                               results['micro/f1'],
+                                               results['macro/f1'],
+                                               results['samples/f1'],
+                                               ))
 
     # save the trained model to disk
     torch.save({
@@ -84,15 +91,12 @@ def main(config_path):
                 'model_state_dict': model.state_dict(),
                 'optimizer_state_dict': optimizer.state_dict(),
                 'loss': criterion,
-                }, '/misc/student/alzouabk/Thesis/supervised_multi_label_classification/outputs/model.pth')
+                }, os.path.join(output_path, '/model.pth'))
+
     # plot and save the train and validation line graphs
-    plt.figure(figsize=(10, 7))
-    plt.plot(train_loss, color='orange', label='train loss')
-    plt.plot(valid_loss, color='red', label='validation loss')
-    plt.xlabel('Epochs')
-    plt.ylabel('Loss')
-    plt.legend()
-    plt.savefig('/misc/student/alzouabk/Thesis/supervised_multi_label_classification/outputs/loss.png')
+    if config['plot_curves']:
+        plot_loss(train_loss, valid_loss, output_path)
+        plot_evaluation_metrics(eval_results, output_path)
 
 
 if __name__ == '__main__':

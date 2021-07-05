@@ -1,14 +1,20 @@
 # Random seed
 SEED: 101
 
+# experiment name
+exp_name: "default_run/"
+
 # path to json file with annotations
-json_file_path: "/misc/lmbraid19/argusm/CLUSTER/multimed/NSEG2015_2/train.json"
+json_file_path_train: "/misc/lmbraid19/argusm/CLUSTER/multimed/NSEG2015_2/train.json"
+json_file_path_test: "/misc/lmbraid19/argusm/CLUSTER/multimed/NSEG2015_2/test.json"
 
 # path to the images' folder
 images_path: "/misc/lmbraid19/argusm/CLUSTER/multimed/NSEG2015_2/JPEGImages/"
 
+# path to output
+output_path: "/misc/student/alzouabk/Thesis/supervised_multi_label_classification/outputs/"
+
 # data loading parameters:
-validation_split: .15
 shuffle_dataset: True
 batch_size: 18
 
@@ -19,3 +25,9 @@ requires_grad: True
 # learning parameters
 lr: 0.0005
 epochs: 40
+
+# Evaluate?
+evaluate: True
+
+# Visualize?
+plot_curves: True

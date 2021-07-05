@@ -1,7 +1,6 @@
 #PBS -N SMLC_test
 #PBS -S /bin/bash
 #PBS -l nodes=1:ppn=8:gpus=1,mem=8gb,walltime=24:00:00
-#PBS -m a
 #PBS -j oe
 #PBS -q student
 #PBS -o /misc/student/alzouabk/Thesis/supervised_multi_label_classification/outputs/

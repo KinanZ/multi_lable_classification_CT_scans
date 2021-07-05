@@ -63,8 +63,7 @@ def main(config_path):
         )
         if config['evaluate']:
             valid_epoch_loss, results = validate(
-                model, validation_loader, criterion, valid_dataset, device
-            )
+                model, validation_loader, criterion, valid_dataset, device, evaluate=True)
             for key in eval_results:
                 eval_results[key].extend(results[key])
         else:

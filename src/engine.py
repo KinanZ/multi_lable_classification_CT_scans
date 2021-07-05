@@ -62,7 +62,7 @@ def validate(model, dataloader, criterion, val_data, device, evaluate=False):
 def calculate_metrics(pred, target, threshold=0.5):
 
     pred = np.array(pred > threshold, dtype=float)
-    
+
     # Accuracy: In multilabel classification, this function computes subset accuracy: the set of labels predicted
     # for a sample must exactly match the corresponding set of labels in y_true.
     accuracy = accuracy_score(y_true=target, y_pred=pred)

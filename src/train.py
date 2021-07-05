@@ -55,7 +55,7 @@ def main(config_path):
     valid_loss = []
     eval_results = {'accuracy': [], 'micro/precision': [], 'micro/recall': [], 'micro/f1': [],
                     'macro/precision': [], 'macro/recall': [], 'macro/f1': [],
-                    'sample/precision': [], 'sample/recall': [], 'sample/f1': []}
+                    'samples/precision': [], 'samples/recall': [], 'samples/f1': []}
     for epoch in range(epochs):
         print(f"Epoch {epoch+1} of {epochs}")
         train_epoch_loss = train(

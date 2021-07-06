@@ -75,7 +75,7 @@ def main(config_path):
         print(f"Train Loss: {train_epoch_loss:.4f}")
         print(f'Val Loss: {valid_epoch_loss:.4f}')
         if config['evaluate']:
-            print("Accuracy: {:.3f}"
+            print("Accuracy: {:.3f} "
                   "micro f1: {:.3f} "
                   "macro f1: {:.3f} "
                   "samples f1: {:.3f} ".format(results['accuracy'],
@@ -90,7 +90,7 @@ def main(config_path):
                 'model_state_dict': model.state_dict(),
                 'optimizer_state_dict': optimizer.state_dict(),
                 'loss': criterion,
-                }, os.path.join(output_path, '/model.pth'))
+                }, os.path.join(output_path, 'model.pth'))
 
     # plot and save the train and validation line graphs
     if config['plot_curves']:

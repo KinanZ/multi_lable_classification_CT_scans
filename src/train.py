@@ -1,6 +1,7 @@
 import os
 import argparse
 import time
+import logging
 
 import torch
 import torch.nn as nn
@@ -32,6 +33,10 @@ def main(config_path):
     if not os.path.exists(output_path):
         os.makedirs(output_path)
 
+    logging.basicConfig(level=logging.INFO,
+                        filename=os.path.join(output_path, 'out.log'),
+                        format='%(asctime)s :: %(levelname)s :: %(message)s')
+
     train_dataset = brain_CT_scan(json_file_path_train, images_path, train_transforms)
     valid_dataset = brain_CT_scan(json_file_path_test, images_path, valid_transforms)
 
@@ -61,10 +66,12 @@ def main(config_path):
                     'macro/precision': [], 'macro/recall': [], 'macro/f1': [],
                     'samples/precision': [], 'samples/recall': [], 'samples/f1': []}
     for epoch in range(epochs):
-        print(f"Epoch {epoch+1} of {epochs}")
+        logging.info(f"Epoch {epoch+1} of {epochs}")
+        logging.info("Training: ")
         train_epoch_loss = train(
             model, train_loader, optimizer, criterion, train_dataset, device
         )
+        logging.info("Validation: ")
         if config['evaluate']:
             valid_epoch_loss, results = validate(
                 model, validation_loader, criterion, valid_dataset, device, evaluate=True)
@@ -76,17 +83,17 @@ def main(config_path):
             )
         train_loss.append(train_epoch_loss)
         valid_loss.append(valid_epoch_loss)
-        print(f"Train Loss: {train_epoch_loss:.4f}")
-        print(f'Val Loss: {valid_epoch_loss:.4f}')
+        logging.info(f"Train Loss: {train_epoch_loss:.4f}")
+        logging.info(f'Val Loss: {valid_epoch_loss:.4f}')
         if config['evaluate']:
-            print("Accuracy: {:.3f} "
-                  "micro f1: {:.3f} "
-                  "macro f1: {:.3f} "
-                  "samples f1: {:.3f} ".format(results['accuracy'],
-                                               results['micro/f1'],
-                                               results['macro/f1'],
-                                               results['samples/f1'],
-                                               ))
+            logging.info("Accuracy: {:.3f} "
+                         "micro f1: {:.3f} "
+                         "macro f1: {:.3f} "
+                         "samples f1: {:.3f} ".format(results['accuracy'],
+                                                      results['micro/f1'],
+                                                      results['macro/f1'],
+                                                      results['samples/f1'],
+                                                      ))
 
     # save the trained model to disk
     torch.save({
@@ -105,7 +112,8 @@ def main(config_path):
     end_time = time.time()
     hours, rem = divmod(end_time - start_time, 3600)
     minutes, seconds = divmod(rem, 60)
-    print("{:0>2}:{:0>2}:{:05.2f}".format(int(hours), int(minutes), seconds))
+    logging.info("Training is done!, Execution time was: ")
+    logging.info("{:0>2}:{:0>2}:{:05.2f}".format(int(hours), int(minutes), seconds))
 
 
 if __name__ == '__main__':

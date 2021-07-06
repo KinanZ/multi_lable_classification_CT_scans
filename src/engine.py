@@ -10,7 +10,6 @@ from sklearn.metrics import accuracy_score
 
 # training function
 def train(model, dataloader, optimizer, criterion, train_data, device):
-    print('Training')
     model.train()
     counter = 0
     train_running_loss = 0.0
@@ -32,7 +31,6 @@ def train(model, dataloader, optimizer, criterion, train_data, device):
 
 # validation function
 def validate(model, dataloader, criterion, val_data, device, evaluate=False):
-    print('Validating')
     model.eval()
     counter = 0
     val_running_loss = 0.0

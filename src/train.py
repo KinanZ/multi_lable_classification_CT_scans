@@ -1,5 +1,6 @@
 import os
 import argparse
+import time
 
 import torch
 import torch.nn as nn
@@ -14,6 +15,9 @@ import my_utils
 
 
 def main(config_path):
+    # starting time:
+    start_time = time.time()
+
     # read config
     config = my_utils.Configuration(config_path).as_dict
 
@@ -96,6 +100,12 @@ def main(config_path):
     if config['plot_curves']:
         plot_loss(train_loss, valid_loss, output_path)
         plot_evaluation_metrics(eval_results, output_path)
+
+    # time at the end and print it:
+    end_time = time.time()
+    hours, rem = divmod(end_time - start_time, 3600)
+    minutes, seconds = divmod(rem, 60)
+    print("{:0>2}:{:0>2}:{:05.2f}".format(int(hours), int(minutes), seconds))
 
 
 if __name__ == '__main__':

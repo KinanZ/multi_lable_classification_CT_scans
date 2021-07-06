@@ -39,7 +39,7 @@ class brain_CT_scan(Dataset):
             image = self.transform(image)
 
         return {
-            'image': torch.tensor(image, dtype=torch.float32),
+            'image': image,
             'labels': torch.tensor(labels, dtype=torch.float32)
         }
 

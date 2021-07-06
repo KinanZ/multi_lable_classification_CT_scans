@@ -73,17 +73,17 @@ def calculate_metrics(pred, target, threshold=0.5):
     # 'samples': Calculate metrics for each instance, and find their average
     # (only meaningful for multilabel classification where this differs from accuracy_score)
 
-    micro_precision = precision_score(y_true=target, y_pred=pred, average='micro')
-    micro_recall = recall_score(y_true=target, y_pred=pred, average='micro')
-    micro_f1 = f1_score(y_true=target, y_pred=pred, average='micro')
+    micro_precision = precision_score(y_true=target, y_pred=pred, average='micro', zero_division=0)
+    micro_recall = recall_score(y_true=target, y_pred=pred, average='micro', zero_division=0)
+    micro_f1 = f1_score(y_true=target, y_pred=pred, average='micro', zero_division=0)
 
-    macro_precision = precision_score(y_true=target, y_pred=pred, average='macro')
-    macro_recall = recall_score(y_true=target, y_pred=pred, average='macro')
-    macro_f1 =f1_score(y_true=target, y_pred=pred, average='macro')
+    macro_precision = precision_score(y_true=target, y_pred=pred, average='macro', zero_division=0)
+    macro_recall = recall_score(y_true=target, y_pred=pred, average='macro', zero_division=0)
+    macro_f1 =f1_score(y_true=target, y_pred=pred, average='macro', zero_division=0)
 
-    samples_precision = precision_score(y_true=target, y_pred=pred, average='samples')
-    samples_recall = recall_score(y_true=target, y_pred=pred, average='samples')
-    samples_f1 = f1_score(y_true=target, y_pred=pred, average='samples')
+    samples_precision = precision_score(y_true=target, y_pred=pred, average='samples', zero_division=0)
+    samples_recall = recall_score(y_true=target, y_pred=pred, average='samples', zero_division=0)
+    samples_f1 = f1_score(y_true=target, y_pred=pred, average='samples', zero_division=0)
 
     return {
         'accuracy': accuracy,

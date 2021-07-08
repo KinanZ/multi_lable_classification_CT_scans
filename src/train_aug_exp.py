@@ -72,9 +72,7 @@ def main(config_path):
         transforms.RandomApply([
             transforms.GaussianBlur(kernel_size=config['GaussianBlur_kernel_size'], sigma=config['GaussianBlur_sigma']),
         ], p=config['GaussianBlur_p']),
-        transforms.RandomApply([
-            transforms.RandomHorizontalFlip(),
-        ], p=config['RandomHorizontalFlip_p']),
+        transforms.RandomHorizontalFlip(p=config['RandomHorizontalFlip_p']),
         transforms.RandomApply([
             transforms.Normalize(config['Normalize_mean'], config['Normalize_std']),
         ], p=config['Normalize_p']),

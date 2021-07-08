@@ -34,7 +34,7 @@ def main(config_path):
         os.makedirs(output_path)
 
     # save config file to exp folder
-    my_utils.save_yaml(config)
+    my_utils.save_yaml(config, os.path.join(config['output_path'], 'exp_config.yml'))
 
     # logging config
     logging.basicConfig(level=logging.INFO,

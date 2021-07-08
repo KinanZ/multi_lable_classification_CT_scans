@@ -72,6 +72,8 @@ def main(config_path):
         transforms.RandomApply([
             transforms.GaussianBlur(kernel_size=config['GaussianBlur_kernel_size'], sigma=config['GaussianBlur_sigma']),
         ], p=config['GaussianBlur_p']),
+        transforms.RandomErasing(p=config['RandomErasing_p'], scale=config['RandomErasing_scale'],
+                                 ratio=config['RandomErasing_ratio'], value=0, inplace=False),
         transforms.RandomHorizontalFlip(p=config['RandomHorizontalFlip_p']),
         transforms.RandomApply([
             transforms.Normalize(config['Normalize_mean'], config['Normalize_std']),

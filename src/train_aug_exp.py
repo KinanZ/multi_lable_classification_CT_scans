@@ -44,7 +44,7 @@ def main(config_path):
     # Augmentations
     train_transforms = transforms.Compose([
         transforms.RandomApply([
-            transforms.RandomResizedCrop(config['RandomResizedCrop_size'], scale=config['RandomResizedCrop_scale']),
+            transforms.RandomResizedCrop(float(config['RandomResizedCrop_size']), scale=config['RandomResizedCrop_scale']),
         ], p=config['RandomResizedCrop_p']),
         transforms.RandomApply([
             transforms.Lambda(lambda x: transforms.functional.adjust_brightness(x, brightness_factor=config['adjust_brightness_factor']))

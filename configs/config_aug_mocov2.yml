@@ -42,7 +42,7 @@ requires_grad: True
 
 # learning parameters
 lr: 0.0005
-epochs: 2
+epochs: 40
 
 # Evaluate?
 evaluate: True

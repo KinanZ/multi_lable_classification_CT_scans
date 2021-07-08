@@ -43,15 +43,27 @@ def main(config_path):
 
     # Augmentations
     train_transforms = transforms.Compose([
-        transforms.ToPILImage(),
-        transforms.RandomHorizontalFlip(p=0.5),
-        transforms.RandomRotation(degrees=45),
-        transforms.ToTensor(),
+        transforms.RandomApply([
+            transforms.RandomResizedCrop(config['RandomResizedCrop_size'], scale=config['RandomResizedCrop_scale']),
+        ], p=config['RandomResizedCrop_p']),
+        transforms.RandomApply([
+            transforms.Lambda(lambda x: transforms.functional.adjust_brightness(x, brightness_factor=config['adjust_brightness_factor']))
+        ], p=config['adjust_brightness_p']),
+        transforms.RandomApply([
+            transforms.GaussianBlur(kernel_size=config['GaussianBlur_kernel_size'], sigma=config['GaussianBlur_sigma']),
+        ], p=config['GaussianBlur_p']),
+        transforms.RandomApply([
+            transforms.RandomHorizontalFlip(),
+        ], p=config['RandomHorizontalFlip_p']),
+        transforms.RandomApply([
+            transforms.Normalize(config['Normalize_mean'], config['Normalize_std']),
+        ], p=config['Normalize_p']),
     ])
 
     valid_transforms = transforms.Compose([
-        transforms.ToPILImage(),
-        transforms.ToTensor(),
+        transforms.RandomApply([
+            transforms.Normalize(config['Normalize_mean'], config['Normalize_std']),
+        ], p=config['Normalize_p']),
     ])
 
     train_dataset = brain_CT_scan(json_file_path_train, images_path, train_transforms)
@@ -123,7 +135,9 @@ def main(config_path):
     # save and/or plot the train and validation line graphs
     if config['plot_curves']:
         plot_loss(train_loss, valid_loss, output_path)
-        plot_evaluation_metrics(eval_results, output_path)
+        if config['evaluate']:
+            my_utils.save_csv(eval_results, output_path)
+            plot_evaluation_metrics(eval_results, output_path)
 
     # time at the end and print it:
     end_time = time.time()

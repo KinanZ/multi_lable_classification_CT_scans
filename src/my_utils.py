@@ -1,5 +1,6 @@
 import os
 import yaml
+import csv
 
 
 def read_yaml(yaml_path):
@@ -33,3 +34,14 @@ class Configuration:
             base_config.update(config)
         # set overwritten config
         self.as_dict = base_config
+
+
+def save_csv(data, path):
+    header = data.keys()
+    no_rows = len(data[list(header)[0]])
+
+    with open(os.path.join(path, 'eval_metrics.csv'), 'w', newline='') as csvfile:
+        csvwriter = csv.writer(csvfile, delimiter=',')
+        csvwriter.writerow(header)
+        for row in range(no_rows):
+            csvwriter.writerow([data[key][row] for key in header])

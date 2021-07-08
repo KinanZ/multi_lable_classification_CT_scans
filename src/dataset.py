@@ -5,7 +5,6 @@ import numpy as np
 import torch
 
 from torch.utils.data import Dataset
-import torchvision.transforms as transforms
 
 
 class brain_CT_scan(Dataset):
@@ -30,7 +29,8 @@ class brain_CT_scan(Dataset):
     def __getitem__(self, idx):
         img_name = os.path.join(self.root_dir, '{0:07d}.jpg'.format(self.dataset_annotations[idx]['iid']))
         image = np.array(Image.open(img_name)).astype(np.float32)
-        
+        image = torch.from_numpy(image).unsqueeze(dim=0)
+
         classes = self.dataset_annotations[idx]['labels']
         labels = np.zeros(self.num_classes).astype(np.uint8)
         labels[classes] = 1
@@ -42,16 +42,3 @@ class brain_CT_scan(Dataset):
             'image': image,
             'labels': torch.tensor(labels, dtype=torch.float32)
         }
-
-
-train_transforms = transforms.Compose([
-                transforms.ToPILImage(),
-                transforms.RandomHorizontalFlip(p=0.5),
-                transforms.RandomRotation(degrees=45),
-                transforms.ToTensor(),
-            ])
-
-valid_transforms = transforms.Compose([
-                transforms.ToPILImage(),
-                transforms.ToTensor(),
-            ])

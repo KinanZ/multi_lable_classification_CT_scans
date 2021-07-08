@@ -20,7 +20,7 @@ batch_size: 18
 
 # augmentation settings:
 RandomResizedCrop_size: 512
-RandomResizedCrop_scale: (0.2, 1.)
+RandomResizedCrop_scale: [0.2, 1.]
 RandomResizedCrop_p: 1
 
 adjust_brightness_factor: 0.01

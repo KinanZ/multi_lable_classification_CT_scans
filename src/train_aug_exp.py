@@ -34,7 +34,7 @@ def main(config_path):
         os.makedirs(output_path)
 
     # save config file to exp folder
-    my_utils.save_yaml(config, os.path.join(config['output_path'], 'exp_config.yml'))
+    my_utils.save_yaml(config, os.path.join(output_path, 'exp_config.yml'))
 
     # logging config
     logging.basicConfig(level=logging.INFO,
@@ -44,7 +44,7 @@ def main(config_path):
     # Augmentations
     train_transforms = transforms.Compose([
         transforms.RandomApply([
-            transforms.RandomResizedCrop(float(config['RandomResizedCrop_size']), scale=config['RandomResizedCrop_scale']),
+            transforms.RandomResizedCrop(config['RandomResizedCrop_size'], scale=config['RandomResizedCrop_scale']),
         ], p=config['RandomResizedCrop_p']),
         transforms.RandomApply([
             transforms.Lambda(lambda x: transforms.functional.adjust_brightness(x, brightness_factor=config['adjust_brightness_factor']))

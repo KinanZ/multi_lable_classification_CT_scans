@@ -2,11 +2,13 @@ import os
 import argparse
 import time
 import logging
+import numpy as np
 
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import torchvision.transforms as transforms
+import elasticdeform.torch as etorch
 
 from engine import train, validate
 from dataset import brain_CT_scan
@@ -42,10 +44,28 @@ def main(config_path):
                         format='%(asctime)s :: %(levelname)s :: %(message)s')
 
     # Augmentations
+    # generate a deformation grid
+    displacement = np.random.randn(2, config['elasticdeform_control_points_num'],
+                                   config['elasticdeform_control_points_num']) * config['elasticdeform_sigma']
+    # construct PyTorch input and top gradient
+    displacement = torch.tensor(displacement)
+
+    # train transforms as setup by config.yml
     train_transforms = transforms.Compose([
+        transforms.RandomApply([
+            transforms.Lambda(lambda x: etorch.deform_grid(x.squeeze(), displacement, prefilter=True)),
+            transforms.Lambda(lambda x: my_utils.correct_dim(x)),
+        ], p=config['elasticdeform_p']),
         transforms.RandomApply([
             transforms.RandomResizedCrop(config['RandomResizedCrop_size'], scale=config['RandomResizedCrop_scale']),
         ], p=config['RandomResizedCrop_p']),
+        transforms.RandomApply([
+            transforms.RandomRotation(config['RandomRotation_range']),
+        ], p=config['RandomRotation_p']),
+        transforms.RandomApply([
+            transforms.RandomAffine(0, translate=config['RandomAffine_translate'], scale=config['RandomAffine_scale']
+                                    , shear=config['RandomAffine_shear']),
+        ], p=config['RandomAffine_p']),
         transforms.RandomApply([
             transforms.Lambda(lambda x: transforms.functional.adjust_brightness(x, brightness_factor=config['adjust_brightness_factor']))
         ], p=config['adjust_brightness_p']),
@@ -60,6 +80,7 @@ def main(config_path):
         ], p=config['Normalize_p']),
     ])
 
+    # valid transforms
     valid_transforms = transforms.Compose([
         transforms.RandomApply([
             transforms.Normalize(config['Normalize_mean'], config['Normalize_std']),

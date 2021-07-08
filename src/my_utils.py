@@ -45,3 +45,10 @@ def save_csv(data, path):
         csvwriter.writerow(header)
         for row in range(no_rows):
             csvwriter.writerow([data[key][row] for key in header])
+
+
+def correct_dim(x):
+    if len(x.shape) == 2:
+        return x.unsqueeze(dim=0)
+    else:
+        return x

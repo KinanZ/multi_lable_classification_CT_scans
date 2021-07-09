@@ -2,7 +2,7 @@
 SEED: 101
 
 # experiment name
-exp_name: "supervised_MLC_aug_3/"
+exp_name: "supervised_MLC_aug_3_soft/"
 
 # path to json file with annotations
 json_file_path_train: "/misc/lmbraid19/argusm/CLUSTER/multimed/NSEG2015_2/train.json"
@@ -24,7 +24,7 @@ elasticdeform_sigma: 20
 elasticdeform_p: 0
 
 RandomResizedCrop_size: 512
-RandomResizedCrop_scale: [0.2, 1.]
+RandomResizedCrop_scale: [0.7, 0.9]
 RandomResizedCrop_p: 1
 
 RandomRotation_range: 45

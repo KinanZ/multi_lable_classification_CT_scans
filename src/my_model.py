@@ -2,9 +2,10 @@ from torchvision import models as models
 import torch.nn as nn
 
 
-def resnet_model(num_classes, pretrained, requires_grad=True):
+def resnet_model(num_classes, pretrained, num_channels=3, requires_grad=True):
     model = models.resnet50(progress=True, pretrained=pretrained)
-    model.conv1 = nn.Conv2d(1, 64, kernel_size=7, stride=2, padding=3, bias=False)
+    if num_channels == 1:
+        model.conv1 = nn.Conv2d(1, 64, kernel_size=7, stride=2, padding=3, bias=False)
     # to freeze the hidden layers
     if not requires_grad:
         for param in model.parameters():

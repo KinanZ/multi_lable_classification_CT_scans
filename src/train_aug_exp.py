@@ -65,7 +65,7 @@ def main(config_path):
     # train transforms as setup by config.yml
     train_transforms = transforms.Compose([
         transforms.RandomApply([
-            transforms.Lambda(lambda x: etorch.deform_grid(x.squeeze(), displacement, prefilter=True), axis=axis),
+            transforms.Lambda(lambda x: etorch.deform_grid(x.squeeze(), displacement, prefilter=True, axis=axis)),
             transforms.Lambda(lambda x: my_utils.correct_dim(x)),
         ], p=config['elasticdeform_p']),
         transforms.RandomApply([

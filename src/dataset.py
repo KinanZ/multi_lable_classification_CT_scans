@@ -34,39 +34,25 @@ class brain_CT_scan(Dataset):
             image = np.array(Image.open(img_name)).astype(np.float32)
             image = torch.from_numpy(image).unsqueeze(dim=0)
         elif self.num_channels == 3:
-            if idx != 0 and idx != len(self.dataset_annotations):
-                img_name_mid = os.path.join(self.root_dir, '{0:07d}.jpg'.format(self.dataset_annotations[idx]['iid']))
-                image_mid = np.array(Image.open(img_name_mid)).astype(np.float32)
+            img_name_mid = os.path.join(self.root_dir, '{0:07d}.jpg'.format(self.dataset_annotations[idx]['iid']))
+            image_mid = np.array(Image.open(img_name_mid)).astype(np.float32)
+            try:
                 img_name_pre = os.path.join(self.root_dir,
                                             '{0:07d}.jpg'.format(self.dataset_annotations[idx - 1]['iid']))
-                image_pre = np.array(Image.open(img_name_pre)).astype(np.float32)
-                img_name_post = os.path.join(self.root_dir,
-                                             '{0:07d}.jpg'.format(self.dataset_annotations[idx + 1]['iid']))
-                image_post = np.array(Image.open(img_name_post)).astype(np.float32)
-                image = np.dstack((image_pre, image_mid, image_post))
-                image = torch.from_numpy(image).permute(2, 0, 1)
-            elif idx == 0:
-                img_name_mid = os.path.join(self.root_dir, '{0:07d}.jpg'.format(self.dataset_annotations[idx]['iid']))
-                image_mid = np.array(Image.open(img_name_mid)).astype(np.float32)
-                img_name_pre = os.path.join(self.root_dir, '{0:07d}.jpg'.format(self.dataset_annotations[idx]['iid']))
-                image_pre = np.array(Image.open(img_name_pre)).astype(np.float32)
-                img_name_post = os.path.join(self.root_dir,
-                                             '{0:07d}.jpg'.format(self.dataset_annotations[idx + 1]['iid']))
-                image_post = np.array(Image.open(img_name_post)).astype(np.float32)
-                image = np.dstack((image_pre, image_mid, image_post))
-                image = torch.from_numpy(image).permute(2, 0, 1)
-            elif idx == len(self.dataset_annotations):
-                img_name_mid = os.path.join(self.root_dir, '{0:07d}.jpg'.format(self.dataset_annotations[idx]['iid']))
-                image_mid = np.array(Image.open(img_name_mid)).astype(np.float32)
+            except:
                 img_name_pre = os.path.join(self.root_dir,
-                                            '{0:07d}.jpg'.format(self.dataset_annotations[idx - 1]['iid']))
-                image_pre = np.array(Image.open(img_name_pre)).astype(np.float32)
-                img_name_post = os.path.join(self.root_dir, '{0:07d}.jpg'.format(self.dataset_annotations[idx]['iid']))
-                image_post = np.array(Image.open(img_name_post)).astype(np.float32)
-                image = np.dstack((image_pre, image_mid, image_post))
-                image = torch.from_numpy(image).permute(2, 0, 1)
+                                            '{0:07d}.jpg'.format(self.dataset_annotations[idx]['iid']))
+            image_pre = np.array(Image.open(img_name_pre)).astype(np.float32)
+            try:
+                img_name_post = os.path.join(self.root_dir,
+                                             '{0:07d}.jpg'.format(self.dataset_annotations[idx + 1]['iid']))
+            except:
+                img_name_post = os.path.join(self.root_dir,
+                                             '{0:07d}.jpg'.format(self.dataset_annotations[idx]['iid']))
+            image_post = np.array(Image.open(img_name_post)).astype(np.float32)
+            image = np.dstack((image_pre, image_mid, image_post))
+            image = torch.from_numpy(image).permute(2, 0, 1)
 
-        print(image.shape)
         classes = self.dataset_annotations[idx]['labels']
         labels = np.zeros(self.num_classes).astype(np.uint8)
         labels[classes] = 1

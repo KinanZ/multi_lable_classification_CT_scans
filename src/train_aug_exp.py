@@ -8,7 +8,6 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torchvision.transforms as transforms
-import elasticdeform.torch as etorch
 
 from engine import train, validate
 from dataset import brain_CT_scan
@@ -61,26 +60,26 @@ def main(config_path):
         transforms.RandomApply([
             transforms.Lambda(lambda x: my_utils.elastic_deform(x.squeeze(),
                                                                 control_points_num=config['elasticdeform_control_points_num'],
-                                                                sigma=config['elasticdeform_sigma'], axis=axis)),
+                                                                sigma=config['elasticdeform_sigma'], axis=axis))
         ], p=config['elasticdeform_p']),
         transforms.RandomApply([
-            transforms.RandomResizedCrop(config['RandomResizedCrop_size'], scale=config['RandomResizedCrop_scale']),
+            transforms.RandomResizedCrop(config['RandomResizedCrop_size'], scale=config['RandomResizedCrop_scale'])
         ], p=config['RandomResizedCrop_p']),
         transforms.RandomApply([
-            transforms.RandomRotation(config['RandomRotation_range']),
+            transforms.RandomRotation(config['RandomRotation_range'])
         ], p=config['RandomRotation_p']),
         transforms.RandomApply([
             transforms.RandomAffine(config['RandomAffine_rotate'], translate=config['RandomAffine_translate'], scale=config['RandomAffine_scale']
-                                    , shear=config['RandomAffine_shear']),
+                                    , shear=config['RandomAffine_shear'])
         ], p=config['RandomAffine_p']),
         transforms.RandomApply([
             transforms.Lambda(lambda x: transforms.functional.adjust_brightness(x, brightness_factor=config['adjust_brightness_factor']))
         ], p=config['adjust_brightness_p']),
         transforms.RandomApply([
-            transforms.GaussianBlur(kernel_size=config['GaussianBlur_kernel_size'], sigma=config['GaussianBlur_sigma']),
+            transforms.GaussianBlur(kernel_size=config['GaussianBlur_kernel_size'], sigma=config['GaussianBlur_sigma'])
         ], p=config['GaussianBlur_p']),
-        transforms.RandomErasing(p=config['RandomErasing_p'], scale=config['RandomErasing_scale'],
-                                 ratio=config['RandomErasing_ratio'], value=0, inplace=False),
+        # transforms.RandomErasing(p=config['RandomErasing_p'], scale=config['RandomErasing_scale'],
+        #                         ratio=config['RandomErasing_ratio'], value=0, inplace=False),
         transforms.RandomHorizontalFlip(p=config['RandomHorizontalFlip_p']),
         transforms.RandomApply([normalize], p=config['Normalize_p']),
     ])

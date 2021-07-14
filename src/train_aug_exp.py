@@ -52,7 +52,7 @@ def main(config_path):
                                          std=[config['Normalize_std'], config['Normalize_std'], config['Normalize_std']])
         axis = (1, 2)
     else:
-        normalize = transforms.Normalize(mean=[config['Normalize_mean']], std=[config['Normalize_std']]),
+        normalize = transforms.Normalize(mean=[config['Normalize_mean']], std=[config['Normalize_std']])
         axis = (0, 1)
 
     # train transforms as setup by config.yml
@@ -78,8 +78,8 @@ def main(config_path):
         transforms.RandomApply([
             transforms.GaussianBlur(kernel_size=config['GaussianBlur_kernel_size'], sigma=config['GaussianBlur_sigma'])
         ], p=config['GaussianBlur_p']),
-        # transforms.RandomErasing(p=config['RandomErasing_p'], scale=config['RandomErasing_scale'],
-        #                         ratio=config['RandomErasing_ratio'], value=0, inplace=False),
+        transforms.RandomErasing(p=config['RandomErasing_p'], scale=config['RandomErasing_scale'],
+                                 ratio=config['RandomErasing_ratio'], value=0, inplace=False),
         transforms.RandomHorizontalFlip(p=config['RandomHorizontalFlip_p']),
         transforms.RandomApply([normalize], p=config['Normalize_p']),
     ])

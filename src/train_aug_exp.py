@@ -47,12 +47,6 @@ def main(config_path):
     num_channels = config['num_channels']
 
     # Augmentations
-    # generate a deformation grid
-    displacement = np.random.randn(2, config['elasticdeform_control_points_num'],
-                                   config['elasticdeform_control_points_num']) * config['elasticdeform_sigma']
-    # construct PyTorch input and top gradient
-    displacement = torch.tensor(displacement)
-
     # Normalize mean and std
     if num_channels == 3:
         normalize = transforms.Normalize(mean=[config['Normalize_mean'], config['Normalize_mean'], config['Normalize_mean']],
@@ -65,8 +59,9 @@ def main(config_path):
     # train transforms as setup by config.yml
     train_transforms = transforms.Compose([
         transforms.RandomApply([
-            transforms.Lambda(lambda x: etorch.deform_grid(x.squeeze(), displacement, prefilter=True, axis=axis)),
-            transforms.Lambda(lambda x: my_utils.correct_dim(x)),
+            transforms.Lambda(lambda x: my_utils.elastic_deform(x.squeeze(),
+                                                                control_points_num=config['elasticdeform_control_points_num'],
+                                                                sigma=config['elasticdeform_sigma'], axis=axis)),
         ], p=config['elasticdeform_p']),
         transforms.RandomApply([
             transforms.RandomResizedCrop(config['RandomResizedCrop_size'], scale=config['RandomResizedCrop_scale']),

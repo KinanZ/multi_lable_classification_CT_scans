@@ -1,7 +1,9 @@
 import os
 import yaml
 import csv
-
+import numpy as np
+import torch
+import elasticdeform.torch as etorch
 
 def read_yaml(yaml_path):
     """
@@ -52,3 +54,13 @@ def correct_dim(x):
         return x.unsqueeze(dim=0)
     else:
         return x
+
+
+def elastic_deform(x, control_points_num=3, sigma=20, axis=(1, 2)):
+    # generate a deformation grid
+    displacement = np.random.randn(2, control_points_num, control_points_num) * sigma
+    # construct PyTorch input and top gradient
+    displacement = torch.tensor(displacement)
+    # elastic deformation
+    ed_x = etorch.deform_grid(x.squeeze(), displacement, prefilter=True, axis=axis)
+    return correct_dim(ed_x)

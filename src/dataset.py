@@ -17,6 +17,9 @@ class brain_CT_scan(Dataset):
             root_dir (string): Directory with all the images.
             transform (callable, optional): Optional transform to be applied
                 on a sample.
+            num_channels (int): if 1 -> one slice is the input for the model,
+                if 3 -> the previous and post slices are stacked to the main slice and become a 3-channel input for the model.
+            num_classes (int): number of categories in the dataset
         """
         with open(json_file) as f_obj:
             self.dataset_annotations = json.load(f_obj)["questions"]
@@ -40,6 +43,7 @@ class brain_CT_scan(Dataset):
                 img_name_pre = os.path.join(self.root_dir,
                                             '{0:07d}.jpg'.format(self.dataset_annotations[idx - 1]['iid']))
             except:
+                # if idx == 0
                 img_name_pre = os.path.join(self.root_dir,
                                             '{0:07d}.jpg'.format(self.dataset_annotations[idx]['iid']))
             image_pre = np.array(Image.open(img_name_pre)).astype(np.float32)
@@ -47,6 +51,7 @@ class brain_CT_scan(Dataset):
                 img_name_post = os.path.join(self.root_dir,
                                              '{0:07d}.jpg'.format(self.dataset_annotations[idx + 1]['iid']))
             except:
+                # if idx == len(self.dataset_annotations)
                 img_name_post = os.path.join(self.root_dir,
                                              '{0:07d}.jpg'.format(self.dataset_annotations[idx]['iid']))
             image_post = np.array(Image.open(img_name_post)).astype(np.float32)

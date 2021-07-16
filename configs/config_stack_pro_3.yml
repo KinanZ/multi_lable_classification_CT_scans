@@ -2,7 +2,7 @@
 SEED: 101
 
 # experiment name
-exp_name: "supervised_MLC_pro_2/"
+exp_name: "supervised_MLC_pro_3/"
 
 # path to json file with annotations
 json_file_path_train: "/misc/lmbraid19/argusm/CLUSTER/multimed/NSEG2015_2/train.json"
@@ -20,14 +20,14 @@ batch_size: 18
 
 # augmentation settings:
 elasticdeform_control_points_num: 3
-elasticdeform_sigma: 20
+elasticdeform_sigma: 25
 
 RandomRotation_range: 45
 RandomRotation_p: 1
 
-RandomAffine_translate: [0.15, 0.15]
-RandomAffine_scale: [0.75, 1.25]
-RandomAffine_shear: 0.1
+RandomAffine_translate: [0.2, 0.2]
+RandomAffine_scale: [0.5, 1.25]
+RandomAffine_shear: 0.2
 
 GaussianBlur_kernel_size: [5, 5]
 GaussianBlur_sigma: [.1, 2.]

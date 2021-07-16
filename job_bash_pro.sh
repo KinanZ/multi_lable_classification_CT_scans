@@ -1,4 +1,4 @@
-#PBS -N supervised_MLC_pro_2
+#PBS -N supervised_MLC_pro_fixed
 #PBS -S /bin/bash
 #PBS -l nodes=1:ppn=8:gpus=1,mem=8gb,walltime=24:00:00
 #PBS -j oe

@@ -71,9 +71,7 @@ def main(config_path):
 
     # valid transforms
     valid_transforms = transforms.Compose([
-        transforms.RandomApply([
-            transforms.Normalize(config['Normalize_mean'], config['Normalize_std']),
-        ], p=config['Normalize_p']),
+        transforms.RandomApply([normalize], p=config['Normalize_p']),
     ])
 
     train_dataset = brain_CT_scan(json_file_path_train, images_path, train_transforms, num_channels)

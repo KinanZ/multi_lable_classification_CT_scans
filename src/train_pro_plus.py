@@ -56,26 +56,18 @@ def main(config_path):
 
     # train transforms as setup by config.yml
     train_transforms = transforms.Compose([
-        transforms.RandomChoice([
-            transforms.Lambda(lambda x: my_utils.elastic_deform(x.squeeze(),
-                                                                control_points_num=config['elasticdeform_control_points_num'],
-                                                                sigma=config['elasticdeform_sigma'], axis=axis)),
-            transforms.RandomAffine(0, translate=config['RandomAffine_translate'],
-                                    scale=config['RandomAffine_scale'], shear=config['RandomAffine_shear']),
-            transforms.GaussianBlur(kernel_size=config['GaussianBlur_kernel_size'], sigma=config['GaussianBlur_sigma']),
-            transforms.RandomErasing(p=config['RandomErasing_p'], scale=config['RandomErasing_scale'],
-                                     ratio=config['RandomErasing_ratio'], value=0, inplace=False),
-        ]),
-        transforms.RandomRotation(config['RandomRotation_range']),
+        transforms.Lambda(lambda x: my_utils.elastic_deform(x.squeeze(),
+                                                            control_points_num=config['elasticdeform_control_points_num'],
+                                                            sigma=config['elasticdeform_sigma'], axis=axis)),
+        transforms.RandomAffine(config['RandomRotation_range'], translate=config['RandomAffine_translate'],
+                                scale=config['RandomAffine_scale'], shear=config['RandomAffine_shear']),
         transforms.RandomHorizontalFlip(p=config['RandomHorizontalFlip_p']),
-        transforms.RandomApply([normalize], p=config['Normalize_p']),
+        normalize,
     ])
 
     # valid transforms
     valid_transforms = transforms.Compose([
-        transforms.RandomApply([
-            transforms.Normalize(config['Normalize_mean'], config['Normalize_std']),
-        ], p=config['Normalize_p']),
+        normalize,
     ])
 
     train_dataset = brain_CT_scan(json_file_path_train, images_path, train_transforms, num_channels)

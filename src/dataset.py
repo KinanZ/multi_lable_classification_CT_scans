@@ -38,7 +38,7 @@ class brain_CT_scan(Dataset):
             image = torch.from_numpy(image).unsqueeze(dim=0)
         elif self.num_channels == 3:
             img_name_mid = os.path.join(self.root_dir, '{0:07d}.jpg'.format(self.dataset_annotations[idx]['iid']))
-            image_mid = np.array(Image.open(img_name_mid)).astype(np.float32)
+
             try:
                 img_name_pre = os.path.join(self.root_dir,
                                             '{0:07d}.jpg'.format(self.dataset_annotations[idx - 1]['iid']))
@@ -46,7 +46,7 @@ class brain_CT_scan(Dataset):
                 # if idx == 0
                 img_name_pre = os.path.join(self.root_dir,
                                             '{0:07d}.jpg'.format(self.dataset_annotations[idx]['iid']))
-            image_pre = np.array(Image.open(img_name_pre)).astype(np.float32)
+
             try:
                 img_name_post = os.path.join(self.root_dir,
                                              '{0:07d}.jpg'.format(self.dataset_annotations[idx + 1]['iid']))
@@ -54,6 +54,9 @@ class brain_CT_scan(Dataset):
                 # if idx == len(self.dataset_annotations)
                 img_name_post = os.path.join(self.root_dir,
                                              '{0:07d}.jpg'.format(self.dataset_annotations[idx]['iid']))
+
+            image_mid = np.array(Image.open(img_name_mid)).astype(np.float32)
+            image_pre = np.array(Image.open(img_name_pre)).astype(np.float32)
             image_post = np.array(Image.open(img_name_post)).astype(np.float32)
             image = np.dstack((image_pre, image_mid, image_post))
             image = torch.from_numpy(image).permute(2, 0, 1)

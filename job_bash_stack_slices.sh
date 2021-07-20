@@ -1,4 +1,4 @@
-#PBS -N supervised_MLC_stack_slices_fix_2
+#PBS -N supervised_MLC_default_aug_3_channel
 #PBS -S /bin/bash
 #PBS -l nodes=1:ppn=8:gpus=1,mem=8gb,walltime=24:00:00
 #PBS -j oe

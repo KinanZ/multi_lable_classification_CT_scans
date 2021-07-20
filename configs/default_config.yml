@@ -18,6 +18,9 @@ output_path: "/misc/student/alzouabk/Thesis/supervised_multi_label_classificatio
 shuffle_dataset: True
 batch_size: 18
 
+# multi channel?
+num_channels: 3
+
 # model parameters:
 pretrained: True
 requires_grad: True

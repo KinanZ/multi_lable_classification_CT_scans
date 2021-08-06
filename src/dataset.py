@@ -32,32 +32,34 @@ class brain_CT_scan(Dataset):
         return len(self.dataset_annotations)
 
     def __getitem__(self, idx):
-        img_iid = int(self.img_list[idx][:-4])
+        img_iid = int(self.dataset_annotations[idx]['iid'])
         if self.num_channels == 1:
-            img_name = os.path.join(self.root_dir, self.img_list[idx])
+            img_name = os.path.join(self.root_dir, '{0:07d}.jpg'.format(self.dataset_annotations[idx]['iid']))
             image = np.array(Image.open(img_name)).astype(np.float32)
             image = torch.from_numpy(image).unsqueeze(dim=0)
         elif self.num_channels == 3:
-            img_name_mid = os.path.join(self.root_dir, self.img_list[idx])
+            img_name_mid = os.path.join(self.root_dir, '{0:07d}.jpg'.format(self.dataset_annotations[idx]['iid']))
             try:
-                img_iid_pre = int(self.img_list[idx - 1][:-4])  # -'.jpg'
+                img_iid_pre = int(self.dataset_annotations[idx-1]['iid'])
                 if img_iid_pre == img_iid - 1:
-                    img_name_pre = os.path.join(self.root_dir, self.img_list[idx - 1])
+                    img_name_pre = os.path.join(self.root_dir,
+                                                '{0:07d}.jpg'.format(self.dataset_annotations[idx-1]['iid']))
                 else:
-                    img_name_pre = os.path.join(self.root_dir, self.img_list[idx])
+                    img_name_pre = img_name_mid
             except:
                 # if idx == 0
-                img_name_pre = os.path.join(self.root_dir, self.img_list[idx])
+                img_name_pre = img_name_mid
 
             try:
-                img_iid_post = int(self.img_list[idx + 1][:-4])  # -'.jpg'
+                img_iid_post = int(self.dataset_annotations[idx+1]['iid'])
                 if img_iid_post == img_iid + 1:
-                    img_name_post = os.path.join(self.root_dir, self.img_list[idx + 1])
+                    img_name_post = os.path.join(self.root_dir,
+                                                '{0:07d}.jpg'.format(self.dataset_annotations[idx+1]['iid']))
                 else:
-                    img_name_post = os.path.join(self.root_dir, self.img_list[idx])
+                    img_name_post = img_name_mid
             except:
                 # if idx == len(self.img_list)
-                img_name_post = os.path.join(self.root_dir, self.img_list[idx])
+                img_name_post = img_name_mid
 
             image_mid = np.array(Image.open(img_name_mid)).astype(np.float32)
             image_pre = np.array(Image.open(img_name_pre)).astype(np.float32)

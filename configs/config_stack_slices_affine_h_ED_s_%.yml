@@ -68,4 +68,4 @@ evaluate: True
 plot_curves: True
 
 # multi channel?
-num_channels: 3
+stack_pre_post: True

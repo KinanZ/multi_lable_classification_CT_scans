@@ -1,4 +1,4 @@
-#PBS -N supervised_MLC_affine_h_ED_s_%_GB_upgraded
+#PBS -N supervised_MLC_affine_h_ED_s_%_resnet18
 #PBS -S /bin/bash
 #PBS -l nodes=1:ppn=8:gpus=1,mem=8gb,walltime=24:00:00
 #PBS -j oe

@@ -31,7 +31,6 @@ class brain_CT_scan(Dataset):
         return len(self.dataset_annotations)
 
     def __getitem__(self, idx):
-        img_iid = int(self.dataset_annotations[idx]['iid'])
         if not self.stack_pre_post:
             img_name = os.path.join(self.root_dir, '{0:07d}.jpg'.format(self.dataset_annotations[idx]['iid']))
             image = np.array(Image.open(img_name)).astype(np.float32)
@@ -40,23 +39,13 @@ class brain_CT_scan(Dataset):
         else:
             img_name_mid = os.path.join(self.root_dir, '{0:07d}.jpg'.format(self.dataset_annotations[idx]['iid']))
             try:
-                img_iid_pre = int(self.dataset_annotations[idx-1]['iid'])
-                if img_iid_pre == img_iid - 1:
-                    img_name_pre = os.path.join(self.root_dir,
-                                                '{0:07d}.jpg'.format(self.dataset_annotations[idx-1]['iid']))
-                else:
-                    img_name_pre = img_name_mid
+                img_name_pre = os.path.join(self.root_dir, '{0:07d}.jpg'.format(self.dataset_annotations[idx-1]['iid']))
             except:
                 # if idx == 0
                 img_name_pre = img_name_mid
 
             try:
-                img_iid_post = int(self.dataset_annotations[idx+1]['iid'])
-                if img_iid_post == img_iid + 1:
-                    img_name_post = os.path.join(self.root_dir,
-                                                '{0:07d}.jpg'.format(self.dataset_annotations[idx+1]['iid']))
-                else:
-                    img_name_post = img_name_mid
+                img_name_post = os.path.join(self.root_dir, '{0:07d}.jpg'.format(self.dataset_annotations[idx+1]['iid']))
             except:
                 # if idx == len(self.img_list)
                 img_name_post = img_name_mid

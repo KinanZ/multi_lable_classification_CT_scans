@@ -3,7 +3,7 @@
 #PBS -l nodes=1:ppn=8:gpus=1,mem=8gb,walltime=24:00:00
 #PBS -j oe
 #PBS -q student
-#PBS -o /misc/student/alzouabk/Thesis/supervised_multi_label_classification/outputs/
+#PBS -o /misc/student/alzouabk/Thesis/supervised_multi_label_classification/outputs_final/
 
 
 homePath='/misc/student/alzouabk/miniconda3'

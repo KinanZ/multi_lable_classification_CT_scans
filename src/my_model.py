@@ -3,7 +3,7 @@ import torch.nn as nn
 
 
 def resnet_model(num_classes, pretrained, requires_grad=True):
-    model = models.resnet50(progress=True, pretrained=pretrained)
+    model = models.resnet18(progress=True, pretrained=pretrained)
     # to freeze the hidden layers
     if not requires_grad:
         for param in model.parameters():

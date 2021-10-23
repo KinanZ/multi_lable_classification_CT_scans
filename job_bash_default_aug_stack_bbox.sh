@@ -1,8 +1,8 @@
-#PBS -N supervised_MLC_no_aug_3c
+#PBS -N supervised_MLC_default_aug_3c_stacck
 #PBS -S /bin/bash
 #PBS -l nodes=1:ppn=4:gpus=1:ubuntu2004:nvidiaGTX1080Ti,mem=8gb,walltime=24:00:00
 #PBS -j oe
-#PBS -o /misc/student/alzouabk/Thesis/supervised_multi_label_classification/outputs/
+#PBS -o /misc/student/alzouabk/Thesis/supervised_multi_label_classification/outputs_final/
 
 
 homePath='/misc/student/alzouabk/miniconda3'
@@ -12,4 +12,4 @@ echo "pid, gpu_utilization [%], mem_utilization [%], max_memory_usage [MiB], tim
 nvidia-smi --query-accounted-apps="pid,gpu_util,mem_util,max_memory_usage,time" --format=csv | tail -n1
 
 echo 'Training Should start'
-python3 /misc/student/alzouabk/Thesis/supervised_multi_label_classification/src/train_aug_exp.py -cp '/misc/student/alzouabk/Thesis/supervised_multi_label_classification/configs/config_No_Aug.yml'
+python3 /misc/student/alzouabk/Thesis/supervised_multi_label_classification/src/train_aug_exp.py -cp '/misc/student/alzouabk/Thesis/supervised_multi_label_classification/configs/config_default_aug_stack_bbox.yml'

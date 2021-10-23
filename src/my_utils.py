@@ -1,4 +1,5 @@
 import os
+import random
 import yaml
 import csv
 import numpy as np
@@ -57,3 +58,34 @@ def elastic_deform(x, control_points_num=3, sigma=20, axis=(1, 2)):
     # elastic deformation
     ed_x = etorch.deform_grid(x, displacement, prefilter=True, axis=axis)
     return ed_x
+
+
+def clip(box):
+    new_box = (max(min(int(round(int(round(box[0])))), 512), 0),
+               max(min(int(round(int(round(box[1])))), 512), 0))
+    return new_box
+
+
+def stretch(bbox, factor=.2):
+    # Arguments:
+    bbox2 = []
+    for dim in ((bbox[0], bbox[2]), (bbox[1], bbox[3])):
+        cur_min, cur_max = dim
+        rnd_min, rnd_max = clip((cur_min - np.random.chisquare(df=3) / 8 * cur_min,
+                                 cur_max + np.random.chisquare(df=3) / 8 * (512 - cur_max)))
+
+        bbox2.append((rnd_min, rnd_max))
+    return (bbox2[0][0], bbox2[1][0], bbox2[0][1], bbox2[1][1])
+
+
+def crop_show_augment(image, labels, bboxes):
+    # show the diseased areas based on bounding boxes
+    tmp = np.zeros((512, 512, 3), dtype=np.uint8)
+    if labels[0] == 1:
+        bboxes = random.sample(range(48, 464), 2)
+        bboxes.append(random.randint(bboxes[0], 464))
+        bboxes.append(random.randint(bboxes[1], 464))
+    for b in bboxes:
+        b = stretch(b)
+        tmp[b[1]:b[3], b[0]:b[2], :] = np.asarray(image)[b[1]:b[3], b[0]:b[2], :]
+    return tmp

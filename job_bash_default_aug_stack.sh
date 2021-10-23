@@ -1,8 +1,7 @@
 #PBS -N supervised_MLC_default_aug_3c_stacck
 #PBS -S /bin/bash
-#PBS -l nodes=1:ppn=8:gpus=1,mem=8gb,walltime=24:00:00
+#PBS -l nodes=1:ppn=4:gpus=1:ubuntu2004:nvidiaGTX1080Ti,mem=8gb,walltime=24:00:00
 #PBS -j oe
-#PBS -q student
 #PBS -o /misc/student/alzouabk/Thesis/supervised_multi_label_classification/outputs_final/
 
 

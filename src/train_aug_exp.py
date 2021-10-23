@@ -55,6 +55,12 @@ def main(config_path):
     train_transforms = transforms.Compose([
         transforms.RandomApply([
             transforms.Lambda(lambda x: my_utils.elastic_deform(x,
+                                                                control_points_num=config[
+                                                                    'elasticdeform_control_points_num'],
+                                                                sigma=config['elasticdeform_sigma'], axis=axis))
+        ], p=config['elasticdeform_p']),
+        transforms.RandomApply([
+            transforms.Lambda(lambda x: my_utils.elastic_deform(x,
                                                                 control_points_num=config['elasticdeform_control_points_num'],
                                                                 sigma=config['elasticdeform_sigma'], axis=axis))
         ], p=config['elasticdeform_p']),
@@ -85,7 +91,10 @@ def main(config_path):
         transforms.RandomApply([normalize], p=config['Normalize_p']),
     ])
 
-    train_dataset = brain_CT_scan(json_file_path_train, images_path, train_transforms, stack_pre_post)
+    if config['bbox_aug']:
+        train_dataset = brain_CT_scan(json_file_path_train, images_path, train_transforms, stack_pre_post, bbox_aug= True)
+    else:
+        train_dataset = brain_CT_scan(json_file_path_train, images_path, train_transforms, stack_pre_post)
     valid_dataset = brain_CT_scan(json_file_path_test, images_path, valid_transforms, stack_pre_post)
 
     # data loading parameters

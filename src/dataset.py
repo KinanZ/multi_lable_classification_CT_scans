@@ -6,11 +6,13 @@ import torch
 
 from torch.utils.data import Dataset
 
+from my_utils import crop_show_augment
+
 
 class brain_CT_scan(Dataset):
     """Brain CT Scans dataset."""
 
-    def __init__(self, json_file, root_dir, transform=None, stack_pre_post=True, num_classes=15):
+    def __init__(self, json_file, root_dir, transform=None, stack_pre_post=True, num_classes=15, bbox_aug=False):
         """
         Args:
             json_file (string): Path to the json file with annotations.
@@ -26,6 +28,7 @@ class brain_CT_scan(Dataset):
         self.transform = transform
         self.num_classes = num_classes
         self.stack_pre_post = stack_pre_post
+        self.bbox_aug = bbox_aug
 
     def __len__(self):
         return len(self.dataset_annotations)
@@ -35,7 +38,6 @@ class brain_CT_scan(Dataset):
             img_name = os.path.join(self.root_dir, '{0:07d}.jpg'.format(self.dataset_annotations[idx]['iid']))
             image = np.array(Image.open(img_name)).astype(np.float32)
             image = np.dstack((image, image, image))
-            image = torch.from_numpy(image).permute(2, 0, 1)
         else:
             img_name_mid = os.path.join(self.root_dir, '{0:07d}.jpg'.format(self.dataset_annotations[idx]['iid']))
             try:
@@ -54,12 +56,16 @@ class brain_CT_scan(Dataset):
             image_pre = np.array(Image.open(img_name_pre)).astype(np.float32)
             image_post = np.array(Image.open(img_name_post)).astype(np.float32)
             image = np.dstack((image_pre, image_mid, image_post))
-            image = torch.from_numpy(image).permute(2, 0, 1)
 
         classes = self.dataset_annotations[idx]['labels']
         labels = np.zeros(self.num_classes).astype(np.uint8)
         labels[classes] = 1
+        bboxes = self.dataset_annotations[idx]['bboxes']
 
+        if self.bbox_aug:
+            image = crop_show_augment(image, labels, bboxes)
+
+        image = torch.from_numpy(image).permute(2, 0, 1)
         if self.transform:
             image = self.transform(image)
 

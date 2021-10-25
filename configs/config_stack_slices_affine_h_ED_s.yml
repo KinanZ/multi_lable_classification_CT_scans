@@ -2,7 +2,7 @@
 SEED: 101
 
 # experiment name
-exp_name: "supervised_MLC_affine_h_ED_s/"
+exp_name: "supervised_MLC_affine_h_ED_s_bbox/"
 
 # path to json file with annotations
 json_file_path_train: "/misc/lmbraid19/argusm/CLUSTER/multimed/NSEG2015_2/train.json"
@@ -53,6 +53,8 @@ Normalize_mean: 0.184
 Normalize_std: 0.055
 Normalize_p: 1 # need to be 0 or 1
 
+bbox_aug: True
+
 # model parameters:
 pretrained: True
 requires_grad: True
@@ -68,4 +70,4 @@ evaluate: True
 plot_curves: True
 
 # multi channel?
-num_channels: 3
+stack_pre_post: 3

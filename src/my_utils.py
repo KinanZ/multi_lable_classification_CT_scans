@@ -69,9 +69,6 @@ def clip(box):
 def stretch(bbox, factor=.2):
     # Arguments:
     bbox2 = []
-    print(
-        'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb: ',
-        bbox)
     for dim in ((bbox[0], bbox[2]), (bbox[1], bbox[3])):
         cur_min, cur_max = dim
         rnd_min, rnd_max = clip((cur_min - np.random.chisquare(df=3) / 8 * cur_min,
@@ -82,12 +79,14 @@ def stretch(bbox, factor=.2):
 
 
 def crop_show_augment(image, labels, bboxes):
+    print('bboxes', bboxes)
     # show the diseased areas based on bounding boxes
     tmp = np.zeros((512, 512, 3), dtype=np.uint8)
     if labels[0] == 1:
         bboxes = random.sample(range(48, 464), 2)
         bboxes.append(random.randint(bboxes[0], 464))
         bboxes.append(random.randint(bboxes[1], 464))
+        bboxes = [bboxes]
     for b in bboxes:
         b = stretch(b)
         tmp[b[1]:b[3], b[0]:b[2], :] = np.asarray(image)[b[1]:b[3], b[0]:b[2], :]

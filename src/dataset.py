@@ -61,7 +61,7 @@ class brain_CT_scan(Dataset):
         labels = np.zeros(self.num_classes).astype(np.uint8)
         labels[classes] = 1
         bboxes = self.dataset_annotations[idx]['bboxes']
-
+        
         if self.bbox_aug:
             image = crop_show_augment(image, labels, bboxes)
 

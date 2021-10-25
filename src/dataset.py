@@ -65,7 +65,7 @@ class brain_CT_scan(Dataset):
         if self.bbox_aug:
             image = crop_show_augment(image, labels, bboxes)
 
-        image = torch.from_numpy(image).permute(2, 0, 1).astype(torch.float32)
+        image = torch.tensor(image, dtype=torch.float32).permute(2, 0, 1)
         if self.transform:
             image = self.transform(image)
 

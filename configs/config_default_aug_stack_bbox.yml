@@ -2,7 +2,7 @@
 SEED: 101
 
 # experiment name
-exp_name: "supervised_MLC_default_aug_3c_stack_bbox/"
+exp_name: "supervised_MLC_default_aug_3c_bbox/"
 
 # path to json file with annotations
 json_file_path_train: "/misc/lmbraid19/argusm/CLUSTER/multimed/NSEG2015_2/train.json"
@@ -70,4 +70,4 @@ evaluate: True
 plot_curves: True
 
 # multi channel?
-stack_pre_post: True
+stack_pre_post: False

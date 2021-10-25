@@ -86,7 +86,7 @@ def crop_show_augment(image, labels, bboxes):
         bboxes.append(random.randint(bboxes[0], 464))
         bboxes.append(random.randint(bboxes[1], 464))
     for b in bboxes:
-        print('b: ', b)
+        print('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb: ', b)
         b = stretch(b)
         tmp[b[1]:b[3], b[0]:b[2], :] = np.asarray(image)[b[1]:b[3], b[0]:b[2], :]
     return tmp

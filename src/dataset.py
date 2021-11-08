@@ -10,6 +10,8 @@ from torch.utils.data.sampler import Sampler
 
 from my_utils import crop_show_augment
 
+from my_utils import crop_show_augment
+
 
 class brain_CT_scan(Dataset):
     """Brain CT Scans dataset."""
@@ -31,10 +33,12 @@ class brain_CT_scan(Dataset):
         self.num_classes = num_classes
         self.stack_pre_post = stack_pre_post
         self.bbox_aug = bbox_aug
+
         self.y = np.zeros((len(self.dataset_annotations), self.num_classes)).astype(np.uint8)
         for i in range(len(self.dataset_annotations)):
             classes = self.dataset_annotations[i]['labels']
             self.y[i][classes] = 1
+
 
     def __len__(self):
         return len(self.dataset_annotations)

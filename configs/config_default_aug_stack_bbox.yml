@@ -2,7 +2,7 @@
 SEED: 101
 
 # experiment name
-exp_name: "supervised_MLC_no_aug_3c_balanced/"
+exp_name: "supervised_MLC_default_aug_3c_bbox/"
 
 # path to json file with annotations
 json_file_path_train: "/misc/lmbraid19/argusm/CLUSTER/multimed/NSEG2015_2/train.json"
@@ -28,7 +28,7 @@ RandomResizedCrop_scale: [0.7, 0.9]
 RandomResizedCrop_p: 0
 
 RandomRotation_range: 45
-RandomRotation_p: 0
+RandomRotation_p: 1
 
 RandomAffine_rotate: 0
 RandomAffine_translate: [0.2, 0.2]
@@ -47,13 +47,13 @@ RandomErasing_scale: [0.01, 0.1]
 RandomErasing_ratio: [0.5, 2.0]
 RandomErasing_p: 0
 
-RandomHorizontalFlip_p: 0
+RandomHorizontalFlip_p: 0.5
 
 Normalize_mean: 0.184
 Normalize_std: 0.055
 Normalize_p: 1 # need to be 0 or 1
 
-bbox_aug: False
+bbox_aug: True
 
 # model parameters:
 pretrained: True

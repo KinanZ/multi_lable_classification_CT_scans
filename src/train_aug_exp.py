@@ -10,7 +10,7 @@ import torch.optim as optim
 import torchvision.transforms as transforms
 
 from engine import train, validate
-from dataset import brain_CT_scan
+from dataset import brain_CT_scan, MultilabelBalancedRandomSampler
 from my_model import resnet_model
 from visualize import plot_loss, plot_evaluation_metrics
 import my_utils
@@ -55,6 +55,12 @@ def main(config_path):
     train_transforms = transforms.Compose([
         transforms.RandomApply([
             transforms.Lambda(lambda x: my_utils.elastic_deform(x,
+                                                                control_points_num=config[
+                                                                    'elasticdeform_control_points_num'],
+                                                                sigma=config['elasticdeform_sigma'], axis=axis))
+        ], p=config['elasticdeform_p']),
+        transforms.RandomApply([
+            transforms.Lambda(lambda x: my_utils.elastic_deform(x,
                                                                 control_points_num=config['elasticdeform_control_points_num'],
                                                                 sigma=config['elasticdeform_sigma'], axis=axis))
         ], p=config['elasticdeform_p']),
@@ -85,14 +91,17 @@ def main(config_path):
         transforms.RandomApply([normalize], p=config['Normalize_p']),
     ])
 
-    train_dataset = brain_CT_scan(json_file_path_train, images_path, train_transforms, stack_pre_post)
+    if config['bbox_aug']:
+        train_dataset = brain_CT_scan(json_file_path_train, images_path, train_transforms, stack_pre_post, bbox_aug= True)
+    else:
+        train_dataset = brain_CT_scan(json_file_path_train, images_path, train_transforms, stack_pre_post)
     valid_dataset = brain_CT_scan(json_file_path_test, images_path, valid_transforms, stack_pre_post)
 
     # data loading parameters
-    shuffle_dataset = config['shuffle_dataset']
+    train_sampler = MultilabelBalancedRandomSampler(train_dataset.y, class_choice="least_sampled")
     batch_size = config['batch_size']
 
-    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=shuffle_dataset, num_workers=4)
+    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, sampler=train_sampler, num_workers=4)
     validation_loader = torch.utils.data.DataLoader(valid_dataset, batch_size=batch_size)
 
     # initialize the computation device

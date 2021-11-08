@@ -2,7 +2,7 @@
 SEED: 101
 
 # experiment name
-exp_name: "supervised_MLC_default_aug_3c_stack/"
+exp_name: "supervised_MLC_default_aug_3c_stack_2/"
 
 # path to json file with annotations
 json_file_path_train: "/misc/lmbraid19/argusm/CLUSTER/multimed/NSEG2015_2/train.json"
@@ -52,6 +52,8 @@ RandomHorizontalFlip_p: 0.5
 Normalize_mean: 0.184
 Normalize_std: 0.055
 Normalize_p: 1 # need to be 0 or 1
+
+bbox_aug: False
 
 # model parameters:
 pretrained: True
